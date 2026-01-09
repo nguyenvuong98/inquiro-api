@@ -6,12 +6,13 @@ const config = configuration.default();
 export const sendTextPrompt = async (
   prompt: string,
   stream: boolean = false,
+  cacheUrl: string = '',
 ) => {
   try {
     if (!prompt) return;
     const model = 'qwen3:30b-instruct';
 
-    const agentUri = process.env.AI_URI;
+    const agentUri = cacheUrl || process.env.AI_URI;
     const agentPath = '/api/generate';
     const agentUsername = process.env.AI_USERNAME;
     const agentPassword = process.env.AI_PWD;

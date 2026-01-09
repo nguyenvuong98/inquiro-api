@@ -18,3 +18,13 @@ export class AgentGenerateResDto {
   })
   stream: boolean;
 }
+
+export class SaveUrlDto {
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    type: String,
+    description: 'new AI url',
+  })
+  url: string;
+}

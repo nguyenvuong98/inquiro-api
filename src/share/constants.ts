@@ -7,3 +7,5 @@ export enum DbModel {
 export const ACCESS_TOKEN_HEADER_NAME = 'access-token';
 export const USER_PAYLOAD_HEADER_NAME = 'user-payload';
 export const USER_DETAIL_HEADER_NAME = 'user';
+
+export const AI_URI_CACHE = 'ai_uri_cache';
