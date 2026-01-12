@@ -2,6 +2,8 @@ export enum DbModel {
   USER = 'User',
   PROJECT = 'Project',
   ROLES = 'Roles',
+  CONVERSATION = 'conversation',
+  WORK_SPACE = 'work_space',
 }
 
 export const ACCESS_TOKEN_HEADER_NAME = 'access-token';

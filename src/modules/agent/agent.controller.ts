@@ -1,7 +1,11 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { AgentService } from './agent.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AgentGenerateResDto, SaveUrlDto } from './agent.dto';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AgentGenerateAuthResDto, AgentGenerateResDto, ConversationsDto, SaveUrlDto } from './agent.dto';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { Req } from '@nestjs/common';
+import { USER_PAYLOAD_HEADER_NAME } from 'src/share/constants';
 
 @Controller('agent')
 @ApiTags('Agent')
@@ -30,7 +34,52 @@ export class AgentController {
     description: 'Finish think',
   })
   @Post('/generate')
-  generateResponse(@Body() userRegister: AgentGenerateResDto): Promise<any> {
-    return this.agentService.generateResponse(userRegister);
+  generateResponse(@Body() input: AgentGenerateResDto): Promise<any> {
+    return this.agentService.generateResponse(input);
+  }
+
+  @ApiOperation({
+    operationId: 'Generate response',
+    description: 'Generate response',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Finish think',
+  })
+  @Post('/auth/generate')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('access-token')
+  generateAuth(@Body() input: AgentGenerateAuthResDto, @Req() request: Request): Promise<any> {
+    return this.agentService.generateAuthResponse(input, request[USER_PAYLOAD_HEADER_NAME].id);
+  }
+
+  @ApiOperation({
+    operationId: 'Create workspace',
+    description: 'Create workspace',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Create workspace successfully.',
+  })
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('access-token')
+  @Post('/workspace')
+  Logout(@Req() request: Request) {
+    return this.agentService.createWorkSpace(request[USER_PAYLOAD_HEADER_NAME]);
+  }
+
+  @ApiOperation({
+    operationId: 'Get list conversation by workspaceId',
+    description: 'Get list conversation by workspaceId',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully.',
+  })
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('access-token')
+  @Post('/coversation')
+  conversationList(@Req() request: Request, @Body() input: ConversationsDto) {
+    return this.agentService.getConversationList(input, request[USER_PAYLOAD_HEADER_NAME].id);
   }
 }
