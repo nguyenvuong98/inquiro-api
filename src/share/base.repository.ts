@@ -28,7 +28,7 @@ export class BaseRepository {
 
   async findPanigation(filter = {}, page = 1, pageSize = 10) {
     let pageC = page > 0 ? page : 1;
-    let pageSizeC = pageSize > 0 ? pageSize : 20;
+    let pageSizeC = parseInt((pageSize > 0 ? pageSize : 20) + '');
     const skip = (pageC - 1) * pageSizeC;
     console.log(skip)
   

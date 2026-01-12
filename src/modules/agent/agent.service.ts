@@ -1,5 +1,5 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
-import { AgentGenerateAuthResDto, AgentGenerateResDto, ConversationsDto } from './agent.dto';
+import { AgentGenerateAuthResDto, AgentGenerateResDto, ConversationsDto, WorkspaceDto } from './agent.dto';
 import { sendTextPrompt } from 'src/share/axios';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -32,6 +32,8 @@ export class AgentService {
 
     return workSpace;
   }
+
+ 
 
   async generateAuthResponse(input: AgentGenerateAuthResDto, userId: string) {
     const { prompt, stream, workspaceId } = input;
@@ -68,5 +70,12 @@ export class AgentService {
     const response = await this.conversationRepository.findPanigation({workspaceId, userId}, page, pageSize);
 
     return response;
+  }
+
+  async getWorkSpaceList(input: WorkspaceDto, userId: string) {
+    const { page, pageSize } = input;
+    const workSpace = await this.workSpaceRepository.findPanigation({userId}, page, pageSize);
+
+    return workSpace;
   }
 }

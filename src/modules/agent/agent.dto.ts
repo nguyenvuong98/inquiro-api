@@ -1,4 +1,5 @@
 import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class AgentGenerateResDto {
@@ -47,6 +48,7 @@ export class ConversationsDto {
   workspaceId: string;
 
   @IsNumber()
+  @Type(() => Number)
   @ApiProperty({
     type: Number,
     description: 'page',
@@ -55,6 +57,27 @@ export class ConversationsDto {
   page: number;
 
   @IsNumber()
+  @Type(() => Number)
+  @ApiProperty({
+    type: Number,
+    description: 'pageSize',
+    default: 20,
+  })
+  pageSize: number;
+}
+
+export class WorkspaceDto {
+  @IsNumber()
+  @Type(() => Number)
+  @ApiProperty({
+    type: Number,
+    description: 'page',
+    default: 0
+  })
+  page: number;
+
+  @IsNumber()
+  @Type(() => Number)
   @ApiProperty({
     type: Number,
     description: 'pageSize',

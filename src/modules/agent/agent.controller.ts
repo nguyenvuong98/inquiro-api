@@ -1,11 +1,12 @@
-import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Query } from '@nestjs/common';
 import { AgentService } from './agent.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { AgentGenerateAuthResDto, AgentGenerateResDto, ConversationsDto, SaveUrlDto } from './agent.dto';
+import { AgentGenerateAuthResDto, AgentGenerateResDto, ConversationsDto, SaveUrlDto, WorkspaceDto } from './agent.dto';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Req } from '@nestjs/common';
 import { USER_PAYLOAD_HEADER_NAME } from 'src/share/constants';
+import { get } from 'http';
 
 @Controller('agent')
 @ApiTags('Agent')
@@ -78,8 +79,23 @@ export class AgentController {
   })
   @UseGuards(AuthGuard)
   @ApiBearerAuth('access-token')
-  @Post('/coversation')
-  conversationList(@Req() request: Request, @Body() input: ConversationsDto) {
+  @Get('/coversation')
+  conversationList(@Req() request: Request, @Query() input: ConversationsDto) {
     return this.agentService.getConversationList(input, request[USER_PAYLOAD_HEADER_NAME].id);
+  }
+
+  @ApiOperation({
+    operationId: 'Get list workspace by user',
+    description: 'Get list workspace by user',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'successfully.',
+  })
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('access-token')
+  @Get('/workspace')
+  workspaceList(@Req() request: Request, @Query() input: WorkspaceDto) {
+    return this.agentService.getWorkSpaceList(input, request[USER_PAYLOAD_HEADER_NAME].id);
   }
 }
